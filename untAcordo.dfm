@@ -13,6 +13,14 @@ object FrmPrincipal: TFrmPrincipal
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
+  object Label9: TLabel
+    Left = 841
+    Top = 440
+    Width = 48
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'Vers'#227'o 10'
+  end
   object ButtonGerarArquivoRemessa: TButton
     Left = 16
     Top = 428

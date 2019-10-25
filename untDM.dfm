@@ -132,8 +132,9 @@ object DM: TDM
       Size = 9
     end
     object TbAcordoCpfCnpjCliente: TWideStringField
+      DisplayWidth = 15
       FieldName = 'CpfCnpjCliente'
-      Size = 11
+      Size = 15
     end
     object TbAcordoNomeAvalista1: TWideStringField
       FieldName = 'NomeAvalista1'
@@ -144,16 +145,18 @@ object DM: TDM
       Size = 40
     end
     object TbAcordoCpfCnpjAvalista1: TWideStringField
+      DisplayWidth = 14
       FieldName = 'CpfCnpjAvalista1'
-      Size = 11
+      Size = 14
     end
     object TbAcordoFilialAvalista1: TWideStringField
       FieldName = 'FilialAvalista1'
       Size = 50
     end
     object TbAcordoCpfCnpjAvalista2: TWideStringField
+      DisplayWidth = 14
       FieldName = 'CpfCnpjAvalista2'
-      Size = 11
+      Size = 14
     end
     object TbAcordoFilialAvalista2: TWideStringField
       FieldName = 'FilialAvalista2'

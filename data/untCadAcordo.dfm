@@ -38,14 +38,14 @@ object FrmAcordo: TFrmAcordo
     Caption = 'Observa'#231#227'o'
   end
   object Label25: TLabel
-    Left = 163
+    Left = 131
     Top = 104
     Width = 67
     Height = 13
     Caption = 'Taxa de Juros'
   end
   object Label26: TLabel
-    Left = 406
+    Left = 462
     Top = 104
     Width = 64
     Height = 13
@@ -88,14 +88,14 @@ object FrmAcordo: TFrmAcordo
     Caption = 'Valor honorarios'
   end
   object Label32: TLabel
-    Left = 465
-    Top = 16
-    Width = 89
+    Left = 361
+    Top = 104
+    Width = 74
     Height = 13
-    Caption = 'Taxa de refer'#234'ncia'
+    Caption = 'Taxa refer'#234'ncia'
   end
   object Label35: TLabel
-    Left = 254
+    Left = 222
     Top = 104
     Width = 94
     Height = 13
@@ -107,6 +107,13 @@ object FrmAcordo: TFrmAcordo
     Width = 102
     Height = 13
     Caption = 'Valor Total do acordo'
+  end
+  object Label41: TLabel
+    Left = 454
+    Top = 16
+    Width = 82
+    Height = 13
+    Caption = 'Valor confessado'
   end
   object DBEditNumeroAcordo: TDBEdit
     Left = 22
@@ -129,8 +136,8 @@ object FrmAcordo: TFrmAcordo
     TabOrder = 4
   end
   object DBEditTaxaRef: TDBComboBox
-    Left = 465
-    Top = 32
+    Left = 361
+    Top = 120
     Width = 96
     Height = 21
     DataField = 'TaxaReferencia'
@@ -139,7 +146,7 @@ object FrmAcordo: TFrmAcordo
     Items.Strings = (
       'SIM'
       'N'#195'O')
-    TabOrder = 3
+    TabOrder = 11
   end
   object DBMemoObs: TDBMemo
     Left = 584
@@ -148,7 +155,7 @@ object FrmAcordo: TFrmAcordo
     Height = 111
     DataField = 'Observacao'
     DataSource = DM.DsAcordo
-    TabOrder = 12
+    TabOrder = 13
   end
   object PageControl1: TPageControl
     Left = 22
@@ -156,7 +163,7 @@ object FrmAcordo: TFrmAcordo
     Width = 790
     Height = 377
     ActivePage = TabSheet1
-    TabOrder = 13
+    TabOrder = 14
     object TabSheet1: TTabSheet
       Caption = 'Pend'#234'ncias'
       object GroupBox4: TGroupBox
@@ -823,7 +830,7 @@ object FrmAcordo: TFrmAcordo
     Width = 90
     Height = 25
     Caption = 'Salvar'
-    TabOrder = 14
+    TabOrder = 15
     OnClick = ButtonSalvarAcordoClick
   end
   object ButtonCancelarAcordo: TButton
@@ -832,7 +839,7 @@ object FrmAcordo: TFrmAcordo
     Width = 90
     Height = 25
     Caption = 'Cancelar'
-    TabOrder = 15
+    TabOrder = 16
     OnClick = ButtonCancelarAcordoClick
   end
   object DBEditAssinatura: TDBDateEdit
@@ -891,7 +898,7 @@ object FrmAcordo: TFrmAcordo
   object DBEditHonorario: TRxDBCalcEdit
     Left = 22
     Top = 120
-    Width = 129
+    Width = 99
     Height = 21
     DataField = 'ValorHonorarios'
     DataSource = DM.DsAcordo
@@ -915,9 +922,9 @@ object FrmAcordo: TFrmAcordo
     ZeroEmpty = False
   end
   object DBEditPeriodicidade: TDBComboBox
-    Left = 406
+    Left = 464
     Top = 120
-    Width = 155
+    Width = 97
     Height = 21
     DataField = 'PeriodicidadeAcordo'
     DataSource = DM.DsAcordo
@@ -927,10 +934,10 @@ object FrmAcordo: TFrmAcordo
       '02 - Trimestral'
       '03 - Semestral'
       '04 - Anual ')
-    TabOrder = 11
+    TabOrder = 12
   end
   object DBEditMeioPagamento: TDBComboBox
-    Left = 254
+    Left = 222
     Top = 120
     Width = 131
     Height = 21
@@ -943,7 +950,7 @@ object FrmAcordo: TFrmAcordo
     TabOrder = 10
   end
   object DBEditTaxaJuros: TRxDBCalcEdit
-    Left = 163
+    Left = 131
     Top = 120
     Width = 81
     Height = 21
@@ -953,6 +960,19 @@ object FrmAcordo: TFrmAcordo
     FormatOnEditing = True
     NumGlyphs = 2
     TabOrder = 9
+    ZeroEmpty = False
+  end
+  object DBEditValorConfessado: TRxDBCalcEdit
+    Left = 454
+    Top = 32
+    Width = 107
+    Height = 21
+    DataField = 'ValorConfessado'
+    DataSource = DM.DsAcordo
+    DisplayFormat = '###,###,###,###,##0.00'
+    FormatOnEditing = True
+    NumGlyphs = 2
+    TabOrder = 3
     ZeroEmpty = False
   end
 end

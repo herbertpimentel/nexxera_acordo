@@ -106,6 +106,8 @@ type
     DBEditNomeOperadorDRC: TDBEdit;
     DBEditAprovadoDRC: TDBComboBox;
     DBEditDtaAprovacaoDRC: TDBDateEdit;
+    DBEditValorConfessado: TRxDBCalcEdit;
+    Label41: TLabel;
     procedure ButtonCancelarAcordoClick(Sender: TObject);
     procedure ButtonSalvarAcordoClick(Sender: TObject);
     procedure ButtonAdicionarPendenciaClick(Sender: TObject);

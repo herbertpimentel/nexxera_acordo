@@ -31,6 +31,7 @@ type
     SaveDialog1: TSaveDialog;
     Label8: TLabel;
     DBEditContadorEscritorio: TDBEdit;
+    Label9: TLabel;
     procedure ButtonAdicionarAcordoClick(Sender: TObject);
     procedure ButtonSalvarDadosEscritorioClick(Sender: TObject);
     procedure DBGrid1DblClick(Sender: TObject);
@@ -59,7 +60,7 @@ procedure TFrmPrincipal.ButtonAdicionarAcordoClick(Sender: TObject);
 begin
     if (DM.TbEscritorioCdigo.IsNull) then
     begin
-        ShowMessage('VocÍ precisa salvar os dados do escritÛrio');
+        ShowMessage('VocÔøΩ precisa salvar os dados do escritÔøΩrio');
         Exit;
     end;
     
@@ -107,14 +108,14 @@ begin
 
     if (caminho = EmptyStr) then Exit;
 
-    // prepara a criaÁ„o do arquivo
+    // prepara a criaÔøΩÔøΩo do arquivo
     SL := TStringList.Create();
 
     qtd_parcelas := DM.TbAcordoQuantidadeParcelas.AsInteger;
     qtd_pendencias := DM.TbPendencia.RecordCount;
 
     // tem que gerar uma linha para cada parcela
-    // se houverem mais pendencias que parcelas s„o geradas linhas extras para pendencia
+    // se houverem mais pendencias que parcelas sÔøΩo geradas linhas extras para pendencia
     if (qtd_parcelas > qtd_pendencias) then
         qtd_registros :=  qtd_parcelas
     else
@@ -131,7 +132,7 @@ begin
         // ato
         linha := linha + iif(((DM.TbAcordoValorAtoEntrada.AsCurrency > 0) and (i = 1)), 'S', 'N');
 
-        // cpf administrador escritÛrio
+        // cpf administrador escritÔøΩrio
         linha := linha + Copy(StringLeftPad(DM.TbEscritoriocpf_administrdor_escritorio.AsString, 9, '0'), 1, 9);
 
         // numero do acordo
@@ -158,11 +159,11 @@ begin
         // numero do contrato
         linha := linha + Copy(StringLeftPad(DM.TbPendenciaNumeroContrato.AsString, 9, '0'), 1, 9);
 
-        // quando o numero de pendencias/contratos È maior queo numero de parcelas
-        // devem ser validados apenas os campos atÈ posiÁ„o 65
+        // quando o numero de pendencias/contratos ÔøΩ maior queo numero de parcelas
+        // devem ser validados apenas os campos atÔøΩ posiÔøΩÔøΩo 65
         if (DM.TbPendencia.RecNo > qtd_parcelas) then
         begin
-            // quebra a string apenas porque o DELPHI tem a limitaÁ„o de 255 caracteres por linnha
+            // quebra a string apenas porque o DELPHI tem a limitaÔøΩÔøΩo de 255 caracteres por linnha
             linha := linha
                 // data vencimento da pendencia
                 + StringLeftPad('', 10, ' ')
@@ -257,7 +258,7 @@ begin
             // data vencimento da parcela do acordo
             linha := linha + FormatDateTime('DD.MM.YYYY', calcularDataVencimentoParcela(DM.TbAcordoDataVencimento1ParcelaAcordo.AsDateTime, i));
 
-            // valor da parcela (se for a 1, ent„o È o valor dado no ato, senao È o valor das demais parcelas)
+            // valor da parcela (se for a 1, entÔøΩo ÔøΩ o valor dado no ato, senao ÔøΩ o valor das demais parcelas)
             linha := linha + iif(((DM.TbAcordoValorAtoEntrada.AsFloat > 0.0) and (i = 1)), formatarValorDinheiro(DM.TbAcordoValorAtoEntrada.AsCurrency), formatarValorDinheiro(DM.TbAcordoValorParcelaAcordo.AsCurrency));
 
             // valor honorarios
@@ -320,14 +321,20 @@ begin
             // numero da ultima parcela paga
             linha := linha + Copy(StringLeftPad(DM.TbPendenciaUltimaParcelaPaga.AsString, 4, '0'), 1, 4);
 
-            // cpf/cnpj cliente
-            linha := linha + Copy(StringLeftPad(DM.TbAcordoCpfCnpjCliente.AsString, 9, '0'), 1, 9);
-
-            // filial cnpj cliente
-            linha := linha + Copy(StringLeftPad(DM.TbAcordoFilialCpfCnpjCliente.AsString, 4, '0'), 1, 4);
-
-            // digito cpf/cnpj cliente
-            linha := linha + Copy(StringLeftPad(Copy(DM.TbAcordoCpfCnpjCliente.AsString, 9, 2), 2, ' '), 1, 2);
+            if (length(DM.TbAcordoCpfCnpjCliente.AsString) = 11) then
+            begin
+               // CLIENTE CPF
+               // preencher com 9 primeiros digitos + 0000 + 2 dv cpf
+               // cpf/cnpj cliente
+               linha := linha + Copy(DM.TbAcordoCpfCnpjCliente.AsString, 1, 9) + '0000' + Copy(DM.TbAcordoCpfCnpjCliente.AsString, 10, 2);
+            end
+            else
+            begin
+               // CLIENTE CNPJ
+               // preencher com 0 + 8 primeiros digitos + filial + 2 dv cnpj
+               // OU SEJA o proprio cnpj com um zero na frente pra completar as 15 posicoes
+               linha := linha + StringLeftPad(DM.TbAcordoCpfCnpjCliente.AsString, 15, '0');
+            end;
 
             // codigo meio de pagamento
             linha := linha + Copy(StringLeftPad(Copy(DM.TbAcordoCodigoMeioPagamento.AsString, 1, 3), 3, ' '), 1, 3);
@@ -336,7 +343,7 @@ begin
             linha := linha + formatarValorDinheiro(0.0);
 
             // taxa de juros do acordo
-            linha := linha + formatarValorDinheiro(DM.TbAcordoTaxaJurosAcordo.AsCurrency);
+            linha := linha + StringReplace((formatfloat('0000000000.0000000', DM.TbAcordoTaxaJurosAcordo.AsCurrency)),',','',[rfReplaceAll]);
 
             // aprovado pelo DRC
             linha := linha + Copy(StringRightPad(Copy(DM.TbAcordoDrcAcordoAprovado.AsString, 1, 1), 1, ' '), 1, 1);
@@ -354,22 +361,16 @@ begin
             linha := linha + Copy(StringRightPad(Copy(DM.TbAcordoNomeAvalista2.AsString, 1, 40), 40, ' '), 1, 40);
 
             // cpf do avalista 1
-            linha := linha + Copy(StringLeftPad(DM.TbAcordoCpfCnpjAvalista1.AsString, 9, '0'), 1, 9);
-
-            // filial avalista 1
-            linha := linha + Copy(StringLeftPad(DM.TbAcordoFilialAvalista1.AsString, 4, '0'), 1, 4);
-
-            // digito cpf avalista 1
-            linha := linha + Copy(StringLeftPad(Copy(DM.TbAcordoCpfCnpjAvalista1.AsString, 9, 2), 2, '0'), 1, 2);
+            if (length(DM.TbAcordoCpfCnpjAvalista1.AsString) = 11) then
+               linha := linha + Copy(DM.TbAcordoCpfCnpjAvalista1.AsString, 1, 9) + '0000' + Copy(DM.TbAcordoCpfCnpjAvalista1.AsString, 10, 2)
+            else
+               linha := linha + StringLeftPad(DM.TbAcordoCpfCnpjAvalista1.AsString, 15, '0');
 
             // cpf do avalista 2
-            linha := linha + Copy(StringLeftPad(DM.TbAcordoCpfCnpjAvalista2.AsString, 9, '0'), 1, 9);
-
-            // filial avalista 2
-            linha := linha + Copy(StringLeftPad(DM.TbAcordoFilialAvalista2.AsString, 4, '0'), 1, 4);
-
-            // digito cpf avalista 2
-            linha := linha + Copy(StringLeftPad(Copy(DM.TbAcordoCpfCnpjAvalista2.AsString, 9, 2), 2, '0'), 1, 2);
+            if (length(DM.TbAcordoCpfCnpjAvalista2.AsString) = 11) then
+               linha := linha + Copy(DM.TbAcordoCpfCnpjAvalista2.AsString, 1, 9) + '0000' + Copy(DM.TbAcordoCpfCnpjAvalista2.AsString, 10, 2)
+            else
+               linha := linha + StringLeftPad(DM.TbAcordoCpfCnpjAvalista2.AsString, 15, '0');
 
             // valor confessado
             linha := linha + formatarValorDinheiro(DM.TbAcordoValorConfessado.AsCurrency);
@@ -380,13 +381,13 @@ begin
 
         SL.Add(linha);
 
-        // passa para proxima pendÍncia
+        // passa para proxima pendÔøΩncia
         DM.TbPendencia.Next;
     end;
 
     SL.SaveToFile(caminho);
 
-    // atualiza o contador de arquivos gerados pelo escritÛrio
+    // atualiza o contador de arquivos gerados pelo escritÔøΩrio
     if not (DM.TbEscritorio.State in [dsInsert, dsEdit]) then
         DM.TbEscritorio.Edit;
 
@@ -407,11 +408,11 @@ function TFrmPrincipal.calcularDataVencimentoParcela(dataBase: TDate;
   numeroParcela: Integer): TDate;
 begin
     // fallback para o modo mensal
-    Result := IncMonth(dataBase, numeroParcela);
+    Result := IncMonth(dataBase, numeroParcela - 1);
 
     // mensal
     if Copy(DM.TbAcordoPeriodicidadeAcordo.AsString, 1, 2) = '01' then
-        Result := IncMonth(dataBase, numeroParcela);
+        Result := IncMonth(dataBase, numeroParcela - 1);
 
     // trimetral
     if Copy(DM.TbAcordoPeriodicidadeAcordo.AsString, 1, 2) = '02' then
@@ -440,11 +441,11 @@ begin
     numeroParcelas := DM.TbAcordoQuantidadeParcelas.AsInteger;
 
     // fallback para o modo mensal
-    Result := IncMonth(dataBase, numeroParcelas);
+    Result := IncMonth(dataBase, numeroParcelas - 1);
 
     // mensal
     if Copy(DM.TbAcordoPeriodicidadeAcordo.AsString, 1, 2) = '01' then
-        Result := IncMonth(dataBase, numeroParcelas);
+        Result := IncMonth(dataBase, numeroParcelas - 1);
 
     // trimetral
     if Copy(DM.TbAcordoPeriodicidadeAcordo.AsString, 1, 2) = '02' then
@@ -466,21 +467,21 @@ begin
     // aplica as criicas antes de gerar o arquivo do acordo
 
     if (DM.TbEscritorionome_escritorio.IsNull) then
-        raise Exception.Create('VocÍ precisa preencher o nome do escritÛrio');
+        raise Exception.Create('Voc√™ precisa preencher o nome do escrit√≥rio');
 
     if (DM.TbAcordoNomeCliente.IsNull) then
-        raise Exception.Create('VocÍ precisa preencher o nome do cliente');
+        raise Exception.Create('Voc√™ precisa preencher o nome do cliente');
 
     if (DM.TbPendencia.RecordCount = 0) then
-        raise Exception.Create('VocÍ precisa registrar as pendencias que est„o no acordo');
+        raise Exception.Create('Voc√™ precisa registrar as pendencias que est√£o no acordo');
 
     if (DM.TbAcordoValorAtoEntrada.AsCurrency > 0) then
         qtd_parcelas := DM.TbAcordoQuantidadeParcelas.AsInteger - 1
     else
         qtd_parcelas := DM.TbAcordoQuantidadeParcelas.AsInteger;
 
-    if (((qtd_parcelas * DM.TbAcordoValorParcelaAcordo.AsCurrency) + DM.TbAcordoValorAtoEntrada.AsCurrency) <> DM.TbAcordoValorTotalAcordo.AsCurrency) then
-        raise Exception.Create('O valor total do acordo n„o pode ser diferente do valor das parcelas + o valor dado no ato');
+    //if (((qtd_parcelas * DM.TbAcordoValorParcelaAcordo.AsCurrency) + DM.TbAcordoValorAtoEntrada.AsCurrency) <> DM.TbAcordoValorTotalAcordo.AsCurrency) then
+        //raise Exception.Create('O valor total do acordo n√£o pode ser diferente do valor das parcelas + o valor dado no ato');
 
 
 end;
